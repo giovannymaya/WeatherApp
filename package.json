@@ -1,15 +1,13 @@
 {
   "name": "weatherapp",
-  "version": "1.0.0",
-  "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "version": "2.0.0",
+  "private": true,
+  "description": "Current weather and a 5-day forecast with animated skies, served from Netlify.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "dependencies": {
-    "node-fetch": "^2.7.0"
+  "scripts": {
+    "test": "node --test"
   }
 }

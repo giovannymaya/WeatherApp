@@ -4,25 +4,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type=image/png" href="/assets/fav-gio.png">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'">
+    <meta name="referrer" content="no-referrer">
+    <meta name="description" content="Current weather and a 5-day forecast for any city, with a sky that matches the conditions.">
+    <meta name="theme-color" content="#2f80d1">
     <title>Gio's Weather App</title>
+    <link rel="icon" type="image/png" href="assets/fav-gio.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Big+Shoulders+Display:wght@500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <div class="container">
-        <h1 id="heading">Giovanny's Weather App</h1>
-        <form id="weatherForm">
-            <input type="text" id="city" placeholder="Enter a city name" required>
-            <label for="units">Units: </label>
-            <select id="units">
-                <option value="metric">Metric (°C)</option>
-                <option value="imperial">Imperial (°F)</option>
-            </select>
-            <button id="gbtn" type="submit">Get Weather</button>
-        </form>
-        <div id="weatherResult"></div>
+    <!-- Animated sky. Its look is driven by data-scene / data-time, set from the weather. -->
+    <div id="sky" class="sky" data-scene="clear" data-time="day" aria-hidden="true">
+        <div class="sky-stars"></div>
+        <div class="sky-sun"><span class="sun-rays"></span><span class="sun-core"></span></div>
+        <div class="sky-moon"></div>
+        <div class="sky-clouds"></div>
+        <div class="sky-fog"><span></span><span></span><span></span></div>
+        <div class="sky-precip"></div>
+        <div class="sky-flash"></div>
     </div>
+
+    <main class="app">
+        <header class="topbar">
+            <p class="brand">Gio's Weather</p>
+
+            <form id="search-form" class="search" role="search" novalidate>
+                <label class="visually-hidden" for="city">City</label>
+                <input type="search" id="city" name="city" maxlength="100" autocomplete="address-level2"
+                    placeholder="Search a city, e.g. Yonkers or Paris, FR" required>
+                <button type="submit" class="btn btn-primary">Get weather</button>
+                <button type="button" id="locate" class="btn btn-icon" title="Use my location" aria-label="Use my location">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="8"/></svg>
+                </button>
+            </form>
+
+            <div class="units" role="group" aria-label="Temperature units">
+                <button type="button" class="unit" data-units="imperial" aria-pressed="true">°F</button>
+                <button type="button" class="unit" data-units="metric" aria-pressed="false">°C</button>
+            </div>
+        </header>
+
+        <p id="status" class="status" role="status" aria-live="polite"></p>
+
+        <section id="welcome" class="welcome">
+            <h1>What's the sky doing?</h1>
+            <p>Search any city or use your location to see the weather right now and the next five days.</p>
+        </section>
+
+        <div id="report" class="report hidden">
+            <section class="now" aria-labelledby="place">
+                <h1 id="place" class="place"></h1>
+                <p id="local-time" class="local-time"></p>
+                <p class="temp"><span id="temp"></span><span class="temp-unit" id="temp-unit"></span></p>
+                <p id="condition" class="condition"></p>
+                <p id="feels" class="feels"></p>
+
+                <dl class="stats">
+                    <div><dt>Humidity</dt><dd id="humidity"></dd></div>
+                    <div><dt>Wind</dt><dd id="wind"></dd></div>
+                    <div><dt>Sunrise</dt><dd id="sunrise"></dd></div>
+                    <div><dt>Sunset</dt><dd id="sunset"></dd></div>
+                </dl>
+            </section>
+
+            <section class="forecast" aria-labelledby="forecast-title">
+                <h2 id="forecast-title">5-day forecast</h2>
+                <ol id="forecast-list" class="forecast-list"></ol>
+            </section>
+        </div>
+
+        <footer class="footer">
+            Weather data from <a href="https://openweathermap.org/" rel="noopener noreferrer" target="_blank">OpenWeather</a>
+        </footer>
+    </main>
 
     <script src="app.js"></script>
 </body>
